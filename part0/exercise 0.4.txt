@@ -1,0 +1,31 @@
+# Creating a new note
+
+# post method sends data as json and gets pushed to an existing notes list on the server.
+# server then redirects the browser to update the list.
+browser->server: HTTP Post https://studies.cs.helsinki.fi/exampleapp/new_note
+server-->browser: Page redirect to https://studies.cs.helsinki.fi/exampleapp/notes
+
+
+# Browser restarts the process of loading the page
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+server-->browser: HTML-code
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server-->browser: main.css
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+server-->browser: main.js
+
+note over browser:
+browser starts executing js-code
+that requests JSON data from server 
+end note
+
+# server responds with a json list of notes that includes the new note
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server-->browser: [{ content: "HTML is easy", date: "2019-05-23" }, ...]
+
+note over browser:
+browser executes the event handler
+that renders notes to display
+end note

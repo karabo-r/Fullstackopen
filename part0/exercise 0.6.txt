@@ -1,0 +1,10 @@
+# Creating a new note on Single page app
+
+# post method sends data as json and gets pushed to an existing notes list on the server.
+browser->server: HTTP Post https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+# preloaded javascript from page load handles the ui update and does not redirect
+note over browser:
+browser executes the event handler
+that renders notes to display
+end note

@@ -1,0 +1,21 @@
+# Single page app
+
+# all files needed are retrieved by the browser with a single page load
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa
+server-->browser: spa.html
+server-->browser: main.css
+server-->browser: spa.js
+
+# browser adds styling from main.css
+note over browser:
+browser adds styling and starts executing js-code
+that requests JSON data from server 
+end note
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server-->browser: [{ content: "HTML is easy", date: "2019-05-23" }, ...]
+
+note over browser:
+browser executes the event handler
+that renders notes to display
+end note
