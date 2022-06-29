@@ -6,7 +6,8 @@ browser->server: HTTP Post https://studies.cs.helsinki.fi/exampleapp/new_note
 server-->browser: Page redirect to https://studies.cs.helsinki.fi/exampleapp/notes
 
 
-# Browser restarts the process of loading the page
+# browser restarts the process of loading the page
+# pre-existing sequence diagram from example used below
 browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
 server-->browser: HTML-code
 
