@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
+import axios from "axios";
 
 const App = () => {
 	const [persons, setPersons] = useState([]);
@@ -41,6 +42,12 @@ const App = () => {
 		if (array.includes(newName)) return true;
 		return false;
 	}
+
+	useEffect(()=>{
+		axios
+		.get("http://localhost:3001/persons")
+		.then(response=>console.log(response.data))
+	},[])
 
 	const propsCollection = {
 		newName,
