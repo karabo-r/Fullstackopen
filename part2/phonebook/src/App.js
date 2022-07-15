@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const App = () => {
-	const [persons, setPersons] = useState([{name:'mike', number:12},{name:'karabo', number: 43}]);
+	const [persons, setPersons] = useState([]);
 	const [newName, setNewName] = useState("");
 	const [newNumber, setNewNumber] = useState("");
 	const [filterWord, setFilterWord] = useState("");
@@ -9,13 +9,8 @@ const App = () => {
 	const handleNameChange = (e) => setNewName(e.target.value);
 	const handleNumberChange = (e) => setNewNumber(e.target.value);
 	const personsEntryArray = changeObjectToArray(persons);
-	const displayContacts = personsEntryArray.filter((element) => {
-		const name = element.name
-		if (name.includes(filterWord)) {
-			return name
-		}
-		return
-	})
+	const displayContacts = personsEntryArray.filter((contact) => contact.name.includes(filterWord));
+	
 
 	function handleSubmit(e) {
 		e.preventDefault();
@@ -49,10 +44,8 @@ const App = () => {
 		else return false;
 	}
 
-
-	function handleFilter(e){
-		setFilterWord(e.target.value)
-		
+	function handleFilter(e) {
+		setFilterWord(e.target.value);
 	}
 
 	return (
