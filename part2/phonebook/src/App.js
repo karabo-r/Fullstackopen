@@ -1,4 +1,7 @@
 import { useState } from "react";
+import Filter from "./components/Filter";
+import PersonForm from "./components/PersonForm";
+import Persons from "./components/Persons";
 
 const App = () => {
 	const [persons, setPersons] = useState([]);
@@ -6,7 +9,7 @@ const App = () => {
 	const [newNumber, setNewNumber] = useState("");
 	const [filterWord, setFilterWord] = useState("");
 
-	const handleFilter = (e) => setFilterWord(e.target.value);
+	const handleFilter = (e) => setFilterWord(e.target.value.toLowerCase());
 	const handleNameChange = (e) => setNewName(e.target.value);
 	const handleNumberChange = (e) => setNewNumber(e.target.value);
 
@@ -39,30 +42,28 @@ const App = () => {
 		return false;
 	}
 
+	const propsCollection = {
+		newName,
+		newNumber,
+		filterWord,
+		setNewName,
+		setNewNumber,
+		setFilterWord,
+		handleNameChange,
+		handleNumberChange,
+		handleFilter,
+		handleSubmit,
+		displayContacts
+	}
+
 	return (
 		<div>
 			<h1>Phonebook</h1>
-			<form onSubmit={handleSubmit}>
-				<h2>Add new note</h2>
-				<h4>
-					Filter <input value={filterWord} onChange={handleFilter} />
-				</h4>
-				<h4>
-					name: <input value={newName} onChange={handleNameChange} />
-				</h4>
-				<h4>
-					number: <input value={newNumber} onChange={handleNumberChange} />
-				</h4>
-				<button type="submit">Add</button>
-			</form>
+			<Filter {...propsCollection}/>
+			<h2>Add new note</h2>
+			<PersonForm {...propsCollection}/>
 			<h2>Numbers</h2>
-			{displayContacts?.map((data) => {
-				return (
-					<li key={data.id}>
-						{data.name} {data.number}
-					</li>
-				);
-			})}
+			<Persons {...propsCollection}/>
 		</div>
 	);
 };
