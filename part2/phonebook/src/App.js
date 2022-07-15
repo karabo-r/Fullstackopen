@@ -1,22 +1,21 @@
 import { useState } from "react";
 
 const App = () => {
-	const [persons, setPersons] = useState([]);
+	const [persons, setPersons] = useState([{name:'mike', number:12},{name:'karabo', number: 43}]);
 	const [newName, setNewName] = useState("");
 	const [newNumber, setNewNumber] = useState("");
-	const [filter, setFilter] = useState("");
-	const [showAll, setShowAll] = useState(true);
+	const [filterWord, setFilterWord] = useState("");
 
 	const handleNameChange = (e) => setNewName(e.target.value);
 	const handleNumberChange = (e) => setNewNumber(e.target.value);
-
-
-	
-	
-	// const personsEntryArray = changeObjectToArray(persons);
 	const personsEntryArray = changeObjectToArray(persons);
-	
-
+	const displayContacts = personsEntryArray.filter((element) => {
+		const name = element.name
+		if (name.includes(filterWord)) {
+			return name
+		}
+		return
+	})
 
 	function handleSubmit(e) {
 		e.preventDefault();
@@ -43,16 +42,6 @@ const App = () => {
 		}
 		return array;
 	}
-
-	function handleFilter(e) {
-		e.preventDefault();
-		if (e.target.value) {
-			setShowAll(false);
-			setFilter(e.target.value);
-		}
-		// setShowAll(true)
-	}
-
 	function checkNameDuplicate() {
 		let nameArray = [];
 		personsEntryArray.map((item) => nameArray.push(item.name));
@@ -60,14 +49,20 @@ const App = () => {
 		else return false;
 	}
 
+
+	function handleFilter(e){
+		setFilterWord(e.target.value)
+		
+	}
+
 	return (
 		<div>
 			<h1>Phonebook</h1>
-			<h3>
-				Filter entries <input value={filter} onChange={handleFilter} />
-			</h3>
-			<h2>Add new note</h2>
 			<form onSubmit={handleSubmit}>
+				<h2>Add new note</h2>
+				<h4>
+					Filter <input value={filterWord} onChange={handleFilter} />
+				</h4>
 				<h4>
 					name: <input value={newName} onChange={handleNameChange} />
 				</h4>
