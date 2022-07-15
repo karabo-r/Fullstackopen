@@ -6,11 +6,13 @@ const App = () => {
 	const [newNumber, setNewNumber] = useState("");
 	const [filterWord, setFilterWord] = useState("");
 
+	const handleFilter = (e) => setFilterWord(e.target.value);
 	const handleNameChange = (e) => setNewName(e.target.value);
 	const handleNumberChange = (e) => setNewNumber(e.target.value);
-	const personsEntryArray = changeObjectToArray(persons);
-	const displayContacts = personsEntryArray.filter((contact) => contact.name.includes(filterWord));
-	
+
+	const displayContacts = persons.filter((contact) =>
+		contact.name.includes(filterWord),
+	);
 
 	function handleSubmit(e) {
 		e.preventDefault();
@@ -30,22 +32,11 @@ const App = () => {
 		setNewNumber("");
 	}
 
-	function changeObjectToArray(objectToChange) {
-		let array = [];
-		for (const key in Object.keys(objectToChange)) {
-			array.push(persons[key]);
-		}
-		return array;
-	}
 	function checkNameDuplicate() {
-		let nameArray = [];
-		personsEntryArray.map((item) => nameArray.push(item.name));
-		if (nameArray.includes(newName)) return true;
-		else return false;
-	}
-
-	function handleFilter(e) {
-		setFilterWord(e.target.value);
+		const array = [];
+		persons.map((contact) => array.push(contact.name));
+		if (array.includes(newName)) return true;
+		return false;
 	}
 
 	return (
