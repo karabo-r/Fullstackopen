@@ -6,8 +6,15 @@ const App = () => {
 	const [countriesData, setCountriesData] = useState([])
 	const [filterTerm, setFilterTerm] = useState('')
 
+	const queryMessage = 'Too many matches, make search query more specific'
 	const handleFilterTerm = (e) => {setFilterTerm(e.target.value)}
-	const displayCountries = countriesData.filter(item=>item.name.common.toLowerCase().includes(filterTerm))
+	const displayCountries = provideFilteredCountries()
+
+	console.log(displayCountries.length);
+
+	function provideFilteredCountries(){
+		return countriesData.filter(item=>item.name.common.toLowerCase().includes(filterTerm))
+	}
 
   useEffect(() => {
     axios
@@ -19,6 +26,7 @@ const App = () => {
 
 	return <div>
 		<h1>Find Country <input value={filterTerm} onChange={handleFilterTerm}/></h1>
+		{(displayCountries.length > 10 && filterTerm) && <h3>{queryMessage}</h3>}
 		{displayCountries.map(country=><li>{country.name.common}</li>)}
 	</div>;
 };
