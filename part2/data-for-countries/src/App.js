@@ -7,10 +7,14 @@ const App = () => {
 
 	const queryMessage = "Too many matches, make search query more specific";
 	const handleFilterTerm = (e) => {
-		setFilterTerm(e.target.value);
+		setFilterTerm(e.target.value.toLowerCase());
 	};
+	function handleShowCountry(country){
+		setFilterTerm(country.toLowerCase())
+	}
+
 	const displayCountries = provideFilteredCountries();
-	const languagesInCountry = provideLanguages()
+	// const languagesInCountry = provideLanguages()
 
 	function provideFilteredCountries() {
 		return countriesData.filter((item) =>
@@ -20,12 +24,17 @@ const App = () => {
 
 	function provideLanguages() {
 		let arrayOfLanguages = [];
-			const currentCountryLanguages = displayCountries[0].languages
-			for(const key of Object.keys(currentCountryLanguages)){
-				arrayOfLanguages.push(currentCountryLanguages[key])
+		const path = displayCountries[0].languages
+		if (path) {
+			for(const key of Object.keys(path)){
+				arrayOfLanguages.push(path[key])
 			}
+		}
 	return arrayOfLanguages
 	}
+
+	// console.log(provideLanguages());
+
 
 	useEffect(() => {
 		axios.get("https://restcountries.com/v3.1/all").then((response) => {
@@ -40,7 +49,10 @@ const App = () => {
 			</h1>
 			{displayCountries.length > 10 && filterTerm && <h3>{queryMessage}</h3>}
 			{displayCountries.map((country) => (
-				<li>{country.name.common}</li>
+				<div>
+				{country.name.common}
+				<button onClick={()=>handleShowCountry(country.name.common)}>Show</button>
+				</div>
 			))}
 			{displayCountries.length === 1 &&
 				displayCountries.map((country) => {
@@ -50,7 +62,9 @@ const App = () => {
 							<p>Capital city: {country.capital}</p>
 							<p>Area: {country.area}</p>
 							<h3>Languages</h3>
-							{languagesInCountry.map(language=><li>{language}</li>)}
+							{/* {languagesInCountry.map(language=><li>{language}</li>)} */}
+							<br/>
+							<img src={country.flags.png} />
 						</>
 					);
 				})}
