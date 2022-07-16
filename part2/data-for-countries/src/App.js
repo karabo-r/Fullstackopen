@@ -1,28 +1,26 @@
 import { useEffect, useState } from "react";
-import axois from "axios";
+import axios from 'axios'
 
 const App = () => {
-	const [data, setData] = useState([]);
-	const [filterTerm, setFilterTerm] = useState("");
+	
+	const [countriesData, setCountriesData] = useState([])
+	const [filterTerm, setFilterTerm] = useState('')
 
-	const handleFilterChange = (e) => setFilterTerm(e.target.value);
+	const handleFilterTerm = (e) => {setFilterTerm(e.target.value)}
+	const displayCountries = countriesData.filter(item=>item.name.common.toLowerCase().includes(filterTerm))
 
-	function fetchData() {
-		axois.get("https://restcountries.com/v3.1/all").then((response) => {
-			setData(response.data);
-			// console.log(data);
-		});
-	}
+  useEffect(() => {
+    axios
+      .get('https://restcountries.com/v3.1/all')
+      .then(response => {
+        setCountriesData(response.data)
+      })
+  }, [])
 
-	// useEffect(()=>fetchData,[])
-
-	return (
-		<div>
-			<h4>
-				Find Country <input value={filterTerm} onChange={handleFilterChange} />
-			</h4>
-		</div>
-	);
+	return <div>
+		<h1>Find Country <input value={filterTerm} onChange={handleFilterTerm}/></h1>
+		{displayCountries.map(country=><li>{country.name.common}</li>)}
+	</div>;
 };
 
 export default App;
