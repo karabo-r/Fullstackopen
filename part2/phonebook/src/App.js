@@ -1,8 +1,9 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
-import ContactServices from './services/contacts'
+import ContactServices from "./services/contacts";
 
 const App = () => {
 	const [persons, setPersons] = useState([]);
@@ -14,9 +15,7 @@ const App = () => {
 	const handleNameChange = (e) => setNewName(e.target.value);
 	const handleNumberChange = (e) => setNewNumber(e.target.value);
 
-	const displayContacts = persons.filter((contact) =>
-		contact.name.includes(filterWord),
-	);
+	const displayContacts = filterName(filterWord);
 
 	function handleSubmit(e) {
 		e.preventDefault();
@@ -28,11 +27,12 @@ const App = () => {
 			};
 
 			if (!checkNameDuplicate()) {
-				ContactServices
-				.createContact(newEntry)
-				setPersons(persons.concat(newEntry))
-			}else{
-
+				ContactServices.createContact(newEntry);
+				setPersons(persons.concat(newEntry));
+			}
+			if (checkNameDuplicate() && newEntry.number !== "no number") {
+				replaceOldNumberWithNew();
+			} else {
 				alert(`${newName} is already added to the phonebook`);
 			}
 		}
@@ -48,19 +48,36 @@ const App = () => {
 		return false;
 	}
 
-	function handleDelete(id){
-		ContactServices
-		.deleteContact(id)
-		.then(fetchData)
+	function handleDelete(id) {
+		if (window.confirm(`Delete ${displayContacts[id - 1].name}`)) {
+			ContactServices.deleteContact(id).then(fetchData);
+		}
 	}
 
-	function fetchData(){
-		ContactServices
-		.getAll()
-		.then(response=>setPersons(response.data))
+	function fetchData() {
+		ContactServices.getAll().then((response) => setPersons(response.data));
 	}
-	
-	useEffect(fetchData,[])
+
+	function replaceOldNumberWithNew() {
+		const message = `${newName} is already added to the phonebook, replace the old number with the new one`;
+		if (window.confirm(message)) {
+			const contact = filterName(newName);
+			const id = contact[0].id;
+			const changedContactNumber = {
+				...contact[0],
+				number: newNumber,
+			};
+			ContactServices.updateContactNumber(id, changedContactNumber).then(
+				fetchData,
+			);
+		}
+	}
+
+	function filterName(term) {
+		return persons.filter((contact) => contact.name.includes(term));
+	}
+
+	useEffect(fetchData, []);
 
 	const propsCollection = {
 		newName,
@@ -74,17 +91,17 @@ const App = () => {
 		handleFilter,
 		handleSubmit,
 		handleDelete,
-		displayContacts
-	}
+		displayContacts,
+	};
 
 	return (
 		<div>
 			<h1>Phonebook</h1>
-			<Filter {...propsCollection}/>
+			<Filter {...propsCollection} />
 			<h2>Add new note</h2>
-			<PersonForm {...propsCollection}/>
+			<PersonForm {...propsCollection} />
 			<h2>Numbers</h2>
-			<Persons {...propsCollection}/>
+			<Persons {...propsCollection} />
 		</div>
 	);
 };
