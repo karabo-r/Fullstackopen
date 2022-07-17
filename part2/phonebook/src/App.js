@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
-import axios from "axios";
+import ContactServices from './services/contacts'
 
 const App = () => {
 	const [persons, setPersons] = useState([]);
@@ -27,9 +27,14 @@ const App = () => {
 				number: newNumber || "no number",
 			};
 
-			!checkNameDuplicate()
-				? setPersons(persons.concat(newEntry))
-				: alert(`${newName} is already added to the phonebook`);
+			if (!checkNameDuplicate()) {
+				ContactServices
+				.createContact(newEntry)
+				setPersons(persons.concat(newEntry))
+			}else{
+
+				alert(`${newName} is already added to the phonebook`);
+			}
 		}
 
 		setNewName("");
@@ -43,11 +48,19 @@ const App = () => {
 		return false;
 	}
 
-	useEffect(()=>{
-		axios
-		.get("http://localhost:3001/persons")
-		.then(response=>console.log(response.data))
-	},[])
+	function handleDelete(id){
+		ContactServices
+		.deleteContact(id)
+		.then(fetchData)
+	}
+
+	function fetchData(){
+		ContactServices
+		.getAll()
+		.then(response=>setPersons(response.data))
+	}
+	
+	useEffect(fetchData,[])
 
 	const propsCollection = {
 		newName,
@@ -60,6 +73,7 @@ const App = () => {
 		handleNumberChange,
 		handleFilter,
 		handleSubmit,
+		handleDelete,
 		displayContacts
 	}
 

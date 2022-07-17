@@ -5,6 +5,7 @@ const Persons = (props) => {
 				return (
 					<li key={data.id}>
 						{data.name} {data.number}
+						<button onClick={()=>props.handleDelete(data.id)}>Delete</button>
 					</li>
 				);
 			})}
