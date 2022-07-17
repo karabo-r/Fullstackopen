@@ -10,42 +10,26 @@ const App = () => {
 	const [newName, setNewName] = useState("");
 	const [newNumber, setNewNumber] = useState("");
 	const [filterWord, setFilterWord] = useState("");
-	const [notification, setNotification] = useState('')
-	const [isDisplayNotification, setIsDisplayNotification] = useState(false)
-	
+	const [notification, setNotification] = useState("");
+	const [isDisplayNotification, setIsDisplayNotification] = useState(false);
+
 	const handleFilter = (e) => setFilterWord(e.target.value.toLowerCase());
 	const handleNameChange = (e) => setNewName(e.target.value);
 	const handleNumberChange = (e) => setNewNumber(e.target.value);
 
+	const filterName = (term) => persons.filter((contact) => contact.name.includes(term));
+	const filterId = (id) => persons.filter((contact) => contact.id === id);
+
 	const displayContacts = filterName(filterWord);
 
+	const fetchData = () => {
+		ContactServices.getAll().then((response) => setPersons(response.data));
+	}
 
-	function handleSubmit(e) {
-		e.preventDefault();
-		if (newName || newNumber) {
-			const newEntry = {
-				id: persons.length + 1,
-				name: newName || "no name",
-				number: newNumber || "no number",
-			};
-
-			if (!checkNameDuplicate()) {
-				ContactServices.createContact(newEntry)
-				.then(setIsDisplayNotification(true))
-				setNotification(NotificationMessages.newContactAdded(newName))
-				NotificationMessages.removeNotification(setIsDisplayNotification)
-				setPersons(persons.concat(newEntry));
-			}
-			if (checkNameDuplicate() && newEntry.number !== "no number") {
-				replaceOldNumberWithNew();
-			} 
-			if(!checkNameDuplicate){
-				alert(`${newName} is already added to the phonebook`);
-			}
-		}
-
-		setNewName("");
-		setNewNumber("");
+	const removeNotifications = () => {
+		setTimeout(() => {
+			setIsDisplayNotification(false);
+		}, 4000);
 	}
 
 	function checkNameDuplicate() {
@@ -55,30 +39,62 @@ const App = () => {
 		return false;
 	}
 
-	function handleDelete(id) {
-		const contact = filterId(id)
-		if (window.confirm(`Delete ${contact[0].name}`)) {
-			ContactServices.deleteContact(id)
-			.then(
-				fetchData,
-				setIsDisplayNotification(true),
-				setNotification(NotificationMessages.contactDeletedSuccess(contact[0].name)),
-				NotificationMessages.removeNotification(setIsDisplayNotification)
-			)
-			.catch(
-				setIsDisplayNotification(true),
-				setNotification(NotificationMessages.contactDeleteFail(contact[0].name)),
-				NotificationMessages.removeNotification(setIsDisplayNotification)
+	// create a new contact
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		if (newName || newNumber) {
+			const newEntry = {
+				id: persons.length + 1,
+				name: newName || "no name",
+				number: newNumber || "no number",
+			};
 
-			)
+			if (!checkNameDuplicate()) {
+				ContactServices.createContact(newEntry).then(
+					setIsDisplayNotification(true),
+				);
+				setPersons(persons.concat(newEntry));
+				setNotification(NotificationMessages.newContactAdded(newName))
+				removeNotifications()
+			}
+			if (checkNameDuplicate() && newEntry.number !== "no number") {
+				replaceOldNumberWithNew();
+			}
+			if (!checkNameDuplicate) {
+				alert(`${newName} is already added to the phonebook`);
+			}
+		}
+
+		setNewName("");
+		setNewNumber("");
+	}
+
+	// delete a contact
+	const handleDelete = (id) => {
+		const contact = filterId(id);
+		const name = contact[0].name
+		if (window.confirm(`Delete ${name}`)) {
+			ContactServices.deleteContact(id)
+				.then(
+					fetchData,
+					setIsDisplayNotification(true),
+					setNotification(
+						NotificationMessages.contactDeletedSuccess(name),
+					),
+					removeNotifications(),
+				)
+				.catch(
+					fetchData,
+					setIsDisplayNotification(true),
+					setNotification(
+						NotificationMessages.contactDeleteFail(name),
+					),
+					removeNotifications(),
+				);
 		}
 	}
 
-	function fetchData() {
-		ContactServices.getAll().then((response) => setPersons(response.data));
-	}
-
-	function replaceOldNumberWithNew() {
+	const replaceOldNumberWithNew = () => {
 		const message = `${newName} is already added to the phonebook, replace the old number with the new one`;
 		if (window.confirm(message)) {
 			const contact = filterName(newName);
@@ -90,18 +106,12 @@ const App = () => {
 			ContactServices.updateContactNumber(id, changedContactNumber).then(
 				fetchData,
 				setIsDisplayNotification(true),
-				setNotification(NotificationMessages.contactNumberUpdated(contact[0].name)),
-				NotificationMessages.removeNotification(setIsDisplayNotification),
+				setNotification(
+					NotificationMessages.contactNumberUpdated(contact[0].name),
+				),
+				removeNotifications,
 			);
 		}
-	}
-
-	function filterName(term) {
-		return persons.filter((contact) => contact.name.includes(term));
-	}
-	
-	function filterId(id) {
-		return persons.filter((contact) => contact.id === id);
 	}
 
 	useEffect(fetchData, []);
