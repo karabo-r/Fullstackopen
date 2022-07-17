@@ -1,21 +1,24 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import ContactServices from "./services/contacts";
+import NotificationMessages from "./utils/notificationMessages";
 
 const App = () => {
 	const [persons, setPersons] = useState([]);
 	const [newName, setNewName] = useState("");
 	const [newNumber, setNewNumber] = useState("");
 	const [filterWord, setFilterWord] = useState("");
-
+	const [notification, setNotification] = useState('')
+	const [isDisplayNotification, setIsDisplayNotification] = useState(false)
+	
 	const handleFilter = (e) => setFilterWord(e.target.value.toLowerCase());
 	const handleNameChange = (e) => setNewName(e.target.value);
 	const handleNumberChange = (e) => setNewNumber(e.target.value);
 
 	const displayContacts = filterName(filterWord);
+
 
 	function handleSubmit(e) {
 		e.preventDefault();
@@ -27,12 +30,16 @@ const App = () => {
 			};
 
 			if (!checkNameDuplicate()) {
-				ContactServices.createContact(newEntry);
+				ContactServices.createContact(newEntry)
+				.then(setIsDisplayNotification(true))
+				setNotification(NotificationMessages.newContactAdded(newName))
+				NotificationMessages.removeNotification(setIsDisplayNotification)
 				setPersons(persons.concat(newEntry));
 			}
 			if (checkNameDuplicate() && newEntry.number !== "no number") {
 				replaceOldNumberWithNew();
-			} else {
+			} 
+			if(!checkNameDuplicate){
 				alert(`${newName} is already added to the phonebook`);
 			}
 		}
@@ -49,7 +56,8 @@ const App = () => {
 	}
 
 	function handleDelete(id) {
-		if (window.confirm(`Delete ${displayContacts[id - 1].name}`)) {
+		const contact = filterId(id)
+		if (window.confirm(`Delete ${contact[0].name}`)) {
 			ContactServices.deleteContact(id).then(fetchData);
 		}
 	}
@@ -69,12 +77,19 @@ const App = () => {
 			};
 			ContactServices.updateContactNumber(id, changedContactNumber).then(
 				fetchData,
+				setIsDisplayNotification(true),
+				setNotification(NotificationMessages.contactNumberUpdated(contact[0].name)),
+				NotificationMessages.removeNotification(setIsDisplayNotification),
 			);
 		}
 	}
 
 	function filterName(term) {
 		return persons.filter((contact) => contact.name.includes(term));
+	}
+	
+	function filterId(id) {
+		return persons.filter((contact) => contact.id === id);
 	}
 
 	useEffect(fetchData, []);
@@ -96,6 +111,7 @@ const App = () => {
 
 	return (
 		<div>
+			{isDisplayNotification && notification}
 			<h1>Phonebook</h1>
 			<Filter {...propsCollection} />
 			<h2>Add new note</h2>
