@@ -58,7 +58,19 @@ const App = () => {
 	function handleDelete(id) {
 		const contact = filterId(id)
 		if (window.confirm(`Delete ${contact[0].name}`)) {
-			ContactServices.deleteContact(id).then(fetchData);
+			ContactServices.deleteContact(id)
+			.then(
+				fetchData,
+				setIsDisplayNotification(true),
+				setNotification(NotificationMessages.contactDeletedSuccess(contact[0].name)),
+				NotificationMessages.removeNotification(setIsDisplayNotification)
+			)
+			.catch(
+				setIsDisplayNotification(true),
+				setNotification(NotificationMessages.contactDeleteFail(contact[0].name)),
+				NotificationMessages.removeNotification(setIsDisplayNotification)
+
+			)
 		}
 	}
 
