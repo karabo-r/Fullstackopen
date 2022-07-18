@@ -26,6 +26,11 @@ const App = () => {
 		ContactServices.getAll().then((response) => setPersons(response.data));
 	}
 
+	const displayAndRemoveNotification = () =>{
+		setIsDisplayNotification(true)
+		removeNotifications()
+	}
+
 	const removeNotifications = () => {
 		setTimeout(() => {
 			setIsDisplayNotification(false);
@@ -77,22 +82,22 @@ const App = () => {
 			ContactServices.deleteContact(id)
 				.then(
 					fetchData,
-					setIsDisplayNotification(true),
 					setNotification(
 						NotificationMessages.contactDeletedSuccess(name),
 					),
-					removeNotifications(),
+					displayAndRemoveNotification()
 				)
 				.catch(
 					fetchData,
-					setIsDisplayNotification(true),
 					setNotification(
 						NotificationMessages.contactDeleteFail(name),
 					),
-					removeNotifications(),
+					displayAndRemoveNotification()
 				);
 		}
 	}
+
+	
 
 	const replaceOldNumberWithNew = () => {
 		const message = `${newName} is already added to the phonebook, replace the old number with the new one`;
