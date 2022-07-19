@@ -1,0 +1,1 @@
+web: cd phonebook-backend && node index.js
