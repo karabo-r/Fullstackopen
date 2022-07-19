@@ -1,11 +1,11 @@
 const express = require('express')
 const morgan = require('morgan')
-
+const cors = require('cors')
 const app = express()
-// morgan('tiny')
+
+app.use(cors())
 app.use(express.json())
 app.use(morgan('tiny'))
-
 
 const message = 'hello mom'
 const port = 3001
@@ -91,4 +91,4 @@ app.get('/info',(req,res)=>{
     res.send(information)
 })
 
-app.listen(port, console.log('running on port', port))
+app.listen(process.env.PORT || port, console.log('running on port', port))
