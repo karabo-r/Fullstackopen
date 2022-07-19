@@ -1,1 +1,0 @@
-web: cd part3/phonebook-backend && node index.js
