@@ -23,7 +23,7 @@ const App = () => {
 	const displayContacts = filterName(filterWord);
 
 	const fetchData = () => {
-		ContactServices.getAll().then((response) => setPersons(response.data));
+		ContactServices.getAll(user.token).then((response) => setPersons(response.data));
 	}
 
 	const displayAndRemoveNotification = () =>{

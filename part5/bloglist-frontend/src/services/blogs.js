@@ -14,14 +14,23 @@ const getAll = (token) => {
 const createBlog = (data, token) => {
 	const request = axios.post(blogBaseUrl, data, {
 		headers: {
+			"Content-Type": "application/json",
 			Authorization: `bearer ${token}`,
 		},
 	});
-	return request.then((data) => data.data);
+	return request.then((response) => response.data);
 };
+
+
 const loginUser = (credentials) => {
 	const result = axios.post(loginBaseUrl, credentials);
 	return result.then((response) => response.data);
 };
 
-export default { getAll, loginUser, createBlog };
+const collection = {
+	getAll,
+	loginUser,
+	createBlog,
+};
+
+export default collection;

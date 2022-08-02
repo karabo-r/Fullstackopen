@@ -3,33 +3,18 @@ import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import LoginForm from "./components/LoginForm";
 import CreateForm from "./components/CreateForm";
+import Notifications from "./utils/Notifications";
 
 const App = () => {
 	const [blogs, setBlogs] = useState([]);
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [password, setPassword] = useState("");
 	const [username, setUsername] = useState("");
 	const [user, setUser] = useState(null);
 	const [title, setTitle] = useState("");
 	const [author, setAuthor] = useState("");
 	const [url, setUrl] = useState("");
-
-	const handleLogin = async (e) => {
-		const resultToUserLogin = await blogService.loginUser({
-			username,
-			password,
-		});
-		//save the users credentials to localstorage
-		window.localStorage.setItem(
-			"loggedUserToken",
-			JSON.stringify(resultToUserLogin),
-		);
-		// update user
-		setUser(resultToUserLogin);
-		setIsLoggedIn(true);
-		setUsername("");
-		setPassword("");
-	};
+	const [displayNotification, setDisplayNotification] = useState("");
+	const [isDisplayNotification, setIsDisplayNotification] = useState(false);
 
 	const handlePassword = (e) => {
 		setPassword(e.target.value);
@@ -50,8 +35,37 @@ const App = () => {
 
 	function handleLogout() {
 		localStorage.clear();
-		setIsLoggedIn(false);
+		setUser(null);
 	}
+
+	const handleLogin = async (e) => {
+		e.preventDefault();
+
+		try {
+			const resultToUserLogin = await blogService.loginUser({
+				username,
+				password,
+			});
+
+			console.log(resultToUserLogin);
+			//save the users credentials to localstorage
+			window.localStorage.setItem(
+				"loggedUserToken",
+				JSON.stringify(resultToUserLogin),
+			);
+			// update user
+			setUser(resultToUserLogin);
+			setUsername("");
+			setPassword("");
+		} catch (error) {
+			const message = error.response.data.error;
+			// console.log(message);
+			setDisplayNotification(Notifications.fail(message));
+			displayAndRemoveNotification();
+		}
+		setUsername("");
+		setPassword("");
+	};
 
 	function handleCreate(e) {
 		e.preventDefault();
@@ -65,7 +79,16 @@ const App = () => {
 
 		blogService
 			.createBlog(newBlog, user.token)
-			.then((response) => setBlogs(blogs.concat(response)));
+			.then((response) => {
+				setBlogs(blogs.concat(response));
+				setDisplayNotification(
+					Notifications.success(`${title} by ${author} added`),
+				);
+				displayAndRemoveNotification();
+			})
+			.catch((error) => {
+				setDisplayNotification(Notifications.fail(error));
+			});
 
 		setTitle("");
 		setAuthor("");
@@ -77,10 +100,17 @@ const App = () => {
 		const user = JSON.parse(localStorage.getItem("loggedUserToken"));
 		if (user) {
 			setUser(user);
-			setIsLoggedIn(true);
-			blogService.getAll(user.token).then((data) => setBlogs(data));
+			console.log(user);
 		}
+		blogService.getAll(user.token).then((data) => setBlogs(data));
 	}, []);
+
+	function displayAndRemoveNotification() {
+		setIsDisplayNotification(true);
+		setTimeout(() => {
+			setIsDisplayNotification(false);
+		}, 5000);
+	}
 
 	const propsCollection = {
 		url,
@@ -98,7 +128,8 @@ const App = () => {
 	};
 	return (
 		<div>
-			{!isLoggedIn ? (
+			{isDisplayNotification && displayNotification}
+			{user === null ? (
 				<LoginForm {...propsCollection} />
 			) : (
 				<>
@@ -108,7 +139,7 @@ const App = () => {
 						<button onClick={handleLogout}>logout</button>
 					</h3>
 
-					<CreateForm />
+					<CreateForm {...propsCollection} />
 
 					{blogs.map((blog) => (
 						<Blog key={blog.id} blog={blog} />
