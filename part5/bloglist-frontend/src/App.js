@@ -39,8 +39,6 @@ const App = () => {
 	}
 
 	const handleLogin = async (e) => {
-		e.preventDefault();
-
 		try {
 			const resultToUserLogin = await blogService.loginUser({
 				username,
