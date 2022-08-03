@@ -1,6 +1,8 @@
-const Blog = ({ blog }) => (
+const Blog = ({ blogs}) => (
 	<ul>
-		<li>{blog.title}</li>
+		{blogs.map((blog) => {
+			return <li key={blog.id}>{blog.title}</li>;
+		})}
 	</ul>
 );
 

@@ -2,7 +2,7 @@ import React from "react";
 
 const CreateForm = (props) => {
 	return (
-		<form onSubmit={props.handleCreate}>
+		<form onSubmit={props.handleCreate} >
 			<h2>Create A new blog entry</h2>
 			<p>
 				Title: <input value={props.title} onChange={props.handleTitle} />
@@ -13,7 +13,8 @@ const CreateForm = (props) => {
 			<p>
 				Url: <input value={props.url} onChange={props.handleUrl} />
 			</p>
-			<button>Create</button>
+			<button type="submit">Create</button>
+			<button onClick={()=>props.setVisible(false)}>Cancel</button>
 		</form>
 	);
 };

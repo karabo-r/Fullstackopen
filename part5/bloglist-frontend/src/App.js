@@ -4,6 +4,7 @@ import blogService from "./services/blogs";
 import LoginForm from "./components/LoginForm";
 import CreateForm from "./components/CreateForm";
 import Notifications from "./utils/Notifications";
+// import { isVisible } from "@testing-library/user-event/dist/types/utils";
 
 const App = () => {
 	const [blogs, setBlogs] = useState([]);
@@ -15,6 +16,7 @@ const App = () => {
 	const [url, setUrl] = useState("");
 	const [displayNotification, setDisplayNotification] = useState("");
 	const [isDisplayNotification, setIsDisplayNotification] = useState(false);
+	const [visible, setVisible] = useState(false);
 
 	const handlePassword = (e) => {
 		setPassword(e.target.value);
@@ -83,6 +85,7 @@ const App = () => {
 					Notifications.success(`${title} by ${author} added`),
 				);
 				displayAndRemoveNotification();
+				setVisible(false)
 			})
 			.catch((error) => {
 				setDisplayNotification(Notifications.fail(error));
@@ -99,8 +102,8 @@ const App = () => {
 		if (user) {
 			setUser(user);
 			console.log(user);
+			blogService.getAll(user.token).then((data) => setBlogs(data));
 		}
-		blogService.getAll(user.token).then((data) => setBlogs(data));
 	}, []);
 
 	function displayAndRemoveNotification() {
@@ -114,6 +117,7 @@ const App = () => {
 		url,
 		title,
 		author,
+		setVisible,
 		username,
 		password,
 		handleLogin,
@@ -123,7 +127,11 @@ const App = () => {
 		handleAuthor,
 		handleTitle,
 		handleUrl,
+		blogs,
 	};
+
+	const hideWhenVisble = { display: visible ? "none" : "" };
+	// const showWhenVisble = { display: visible ? "" : "none" };
 	return (
 		<div>
 			{isDisplayNotification && displayNotification}
@@ -132,16 +140,13 @@ const App = () => {
 			) : (
 				<>
 					<h1>blogs</h1>
-					<h3>
-						{user.username} has been logged in{" "}
-						<button onClick={handleLogout}>logout</button>
-					</h3>
-
-					<CreateForm {...propsCollection} />
-
-					{blogs.map((blog) => (
-						<Blog key={blog.id} blog={blog} />
-					))}
+					<h2>Hello, {user.username}</h2>
+					<button onClick={handleLogout}>logout</button> <br />
+					<div style={hideWhenVisble}>
+						<button onClick={() => setVisible(true)}>new blog</button>
+					</div>
+					{visible && <CreateForm {...propsCollection} />}
+					<Blog {...propsCollection} />
 				</>
 			)}
 		</div>
