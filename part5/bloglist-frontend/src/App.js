@@ -4,7 +4,6 @@ import blogService from "./services/blogs";
 import LoginForm from "./components/LoginForm";
 import CreateForm from "./components/CreateForm";
 import Notifications from "./utils/Notifications";
-// import { isVisible } from "@testing-library/user-event/dist/types/utils";
 
 const App = () => {
 	const [blogs, setBlogs] = useState([]);
@@ -59,7 +58,6 @@ const App = () => {
 			setPassword("");
 		} catch (error) {
 			const message = error.response.data.error;
-			// console.log(message);
 			setDisplayNotification(Notifications.fail(message));
 			displayAndRemoveNotification();
 		}
@@ -85,7 +83,7 @@ const App = () => {
 					Notifications.success(`${title} by ${author} added`),
 				);
 				displayAndRemoveNotification();
-				setVisible(false)
+				setVisible(false);
 			})
 			.catch((error) => {
 				setDisplayNotification(Notifications.fail(error));
@@ -116,22 +114,21 @@ const App = () => {
 	const propsCollection = {
 		url,
 		title,
+		blogs,
 		author,
-		setVisible,
 		username,
 		password,
+		setVisible,
+		handleUrl,
 		handleLogin,
+		handleTitle,
 		handleCreate,
+		handleAuthor,
 		handleUsername,
 		handlePassword,
-		handleAuthor,
-		handleTitle,
-		handleUrl,
-		blogs,
 	};
 
 	const hideWhenVisble = { display: visible ? "none" : "" };
-	// const showWhenVisble = { display: visible ? "" : "none" };
 	return (
 		<div>
 			{isDisplayNotification && displayNotification}
