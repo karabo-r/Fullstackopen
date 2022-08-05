@@ -100,7 +100,13 @@ const App = () => {
 		if (user) {
 			setUser(user);
 			console.log(user);
-			blogService.getAll(user.token).then((data) => setBlogs(data));
+			blogService.getAll(user.token).then((data) => {
+				data.forEach(element => {
+					// used for displaying more details 
+					element.displayState = false
+				});
+				setBlogs(data)
+			});
 		}
 	}, []);
 
@@ -119,6 +125,7 @@ const App = () => {
 		username,
 		password,
 		setVisible,
+		setBlogs,
 		handleUrl,
 		handleLogin,
 		handleTitle,
