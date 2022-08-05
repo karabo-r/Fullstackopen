@@ -27,10 +27,21 @@ const loginUser = (credentials) => {
 	return result.then((response) => response.data);
 };
 
+const updateLikes = (token, id, data) =>{
+	const request = axios.put(`${blogBaseUrl}/${id}`, data, {
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `bearer ${token}`,
+		},
+	})
+	return request.then((response)=>response.data)
+}
+
 const collection = {
 	getAll,
 	loginUser,
 	createBlog,
+	updateLikes
 };
 
 export default collection;

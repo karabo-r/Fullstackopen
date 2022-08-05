@@ -94,6 +94,8 @@ const App = () => {
 		setUrl("");
 	}
 
+	
+
 	// no login required if there's already a user in localstorage
 	useEffect(() => {
 		const user = JSON.parse(localStorage.getItem("loggedUserToken"));
@@ -133,6 +135,7 @@ const App = () => {
 		handleAuthor,
 		handleUsername,
 		handlePassword,
+		user
 	};
 
 	const hideWhenVisble = { display: visible ? "none" : "" };

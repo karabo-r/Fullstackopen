@@ -1,6 +1,23 @@
 import styled from "styled-components";
+import BlogsServices from "../services/blogs";
 
-const Blog = ({ blogs, setBlogs }) => {
+const Blog = ({ blogs, setBlogs, user }) => {
+	function updateLikesInBlog(blog) {
+		const id = blog.id;
+		const updatedBlog = {
+			...blog,
+			likes: blog.likes + 1,
+		};
+
+		// update ui without calling api for rerender
+		const currentIndex = blogs.indexOf(blog);
+		blogs.splice(currentIndex, 1, updatedBlog);
+		setBlogs([...blogs]);
+
+		// update likes on database
+		BlogsServices.updateLikes(user.token, id, updatedBlog);
+	}
+
 	function handleStateChange(e) {
 		const currentState = e.displayState;
 		const currentIndex = blogs.indexOf(e);
@@ -22,7 +39,8 @@ const Blog = ({ blogs, setBlogs }) => {
 				<p>{item.url}</p>
 				<p>{item.author}</p>
 				<p>
-					likes 0 <button>like</button>
+					likes {item.likes}{" "}
+					<button onClick={() => updateLikesInBlog(item)}>like</button>
 				</p>
 			</div>
 		);
@@ -41,8 +59,8 @@ const Blog = ({ blogs, setBlogs }) => {
 	const processedBlogs = blogs?.map((item) => {
 		return (
 			<div key={item.id}>
-				{item.displayState && showMoreDetail(item)}
-				{!item.displayState && showLessDetail(item)}
+				{!item.displayState && showMoreDetail(item)}
+				{item.displayState && showLessDetail(item)}
 			</div>
 		);
 	});
@@ -53,8 +71,8 @@ const Blog = ({ blogs, setBlogs }) => {
 const BlogList = styled.div`
 	width: 500px;
 	margin-left: 23px;
-	
-	h1{
+
+	h1 {
 		color: rebeccapurple;
 		border: 1px solid;
 		padding: 6px;
