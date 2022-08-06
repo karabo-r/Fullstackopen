@@ -94,7 +94,6 @@ const App = () => {
 		setUrl("");
 	}
 
-	
 
 	// no login required if there's already a user in localstorage
 	useEffect(() => {

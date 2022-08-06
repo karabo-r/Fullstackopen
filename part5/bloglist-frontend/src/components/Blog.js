@@ -18,6 +18,14 @@ const Blog = ({ blogs, setBlogs, user }) => {
 		BlogsServices.updateLikes(user.token, id, updatedBlog);
 	}
 
+	function deleteBlog(blog){
+		const id = blog.id
+		const currentIndex = blogs.indexOf(blog);
+		blogs.splice(currentIndex, 1)
+		setBlogs([...blogs])
+		BlogsServices.deleteBlog(user.token, id)
+	}
+
 	function handleStateChange(e) {
 		const currentState = e.displayState;
 		const currentIndex = blogs.indexOf(e);
@@ -42,6 +50,7 @@ const Blog = ({ blogs, setBlogs, user }) => {
 					likes {item.likes}{" "}
 					<button onClick={() => updateLikesInBlog(item)}>like</button>
 				</p>
+				<button onClick={()=> deleteBlog(item)}>Delete</button>
 			</div>
 		);
 	}
