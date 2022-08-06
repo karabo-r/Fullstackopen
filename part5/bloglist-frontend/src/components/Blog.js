@@ -21,9 +21,14 @@ const Blog = ({ blogs, setBlogs, user }) => {
 	function deleteBlog(blog){
 		const id = blog.id
 		const currentIndex = blogs.indexOf(blog);
-		blogs.splice(currentIndex, 1)
-		setBlogs([...blogs])
-		BlogsServices.deleteBlog(user.token, id)
+		const confirmMessage = `Remove blog ${blog.title} by ${blog.author}`
+		if (window.confirm(confirmMessage)) {
+			blogs.splice(currentIndex, 1)
+			setBlogs([...blogs])
+			BlogsServices.deleteBlog(user.token, id)
+		}else{
+			return 
+		}
 	}
 
 	function handleStateChange(e) {
