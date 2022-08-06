@@ -107,7 +107,8 @@ const App = () => {
 					// used for displaying more details 
 					element.displayState = false
 				});
-				setBlogs(data)
+				// sort blogs by highest likes
+				setBlogs(data.sort((a, b)=> b.likes - a.likes))
 			});
 		}
 	}, []);
