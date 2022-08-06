@@ -100,7 +100,6 @@ const App = () => {
 		const user = JSON.parse(localStorage.getItem("loggedUserToken"));
 		if (user) {
 			setUser(user);
-			console.log(user);
 			blogService.getAll(user.token).then((data) => {
 				data.forEach(element => {
 					// used for displaying more details 

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import BlogsServices from "../services/blogs";
-
+import PropTypes from 'prop-types'
 const Blog = ({ blogs, setBlogs, user }) => {
 	function updateLikesInBlog(blog) {
 		const id = blog.id;
@@ -92,5 +92,11 @@ const BlogList = styled.div`
 		padding: 6px;
 	}
 `;
+
+Blog.propTypes = {
+	user: PropTypes.object.isRequired,
+	blogs: PropTypes.array.isRequired,
+	setBlogs: PropTypes.func.isRequired
+} 
 
 export default Blog;
