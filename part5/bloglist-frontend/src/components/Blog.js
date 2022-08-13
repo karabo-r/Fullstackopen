@@ -66,6 +66,7 @@ const Blog = ({ blogs, setBlogs, user }) => {
 					{item.title}{" "}
 					<button onClick={() => handleStateChange(item)}>View</button>
 				</h1>
+				<p>{item.author}</p>
 			</div>
 		);
 	}
