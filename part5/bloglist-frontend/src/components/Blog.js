@@ -94,10 +94,10 @@ const BlogList = styled.div`
 	}
 `;
 
-Blog.propTypes = {
-	user: PropTypes.object.isRequired,
-	blogs: PropTypes.array.isRequired,
-	setBlogs: PropTypes.func.isRequired
-} 
+// Blog.propTypes = {
+// 	user: PropTypes.object.isRequired,
+// 	blogs: PropTypes.array.isRequired,
+// 	setBlogs: PropTypes.func.isRequired
+// } 
 
 export default Blog;
