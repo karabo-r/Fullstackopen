@@ -31,8 +31,8 @@ const reducer = (state = initialState, action) => {
 				return anecdote.id !== action.id ? anecdote : newAnecdoteVotes;
 			});
 			break;
-      case 'create':
-        return state.concat(action.data)
+		case "create":
+			return state.concat(action.data);
 
 		default:
 			return state;
