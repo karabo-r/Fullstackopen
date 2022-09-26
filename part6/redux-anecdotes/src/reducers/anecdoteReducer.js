@@ -36,7 +36,7 @@ const anecdoteSlice = createSlice({
 			});
 		},
 		create: (state, action) => {
-			return state.concat(action.data);
+			state.push(action.payload)
 		},
 	},
 });
