@@ -1,10 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+let notificationTimer;
+
 export const setNotification = (message, time) => {
+	clearTimeout(notificationTimer);
 	return (dispatch) => {
-		console.log(message);
 		dispatch(displayNotification(message));
-		setTimeout(() => {
+
+		notificationTimer = setTimeout(() => {
 			dispatch(removeNotification());
 		}, time);
 	};
