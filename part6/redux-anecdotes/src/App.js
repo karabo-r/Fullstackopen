@@ -1,17 +1,20 @@
 import { useEffect } from "react";
 import Fliter from "./components/Fliter";
 import { useDispatch } from "react-redux";
-import { save } from "./reducers/anecdoteReducer";
+// import { save } from "./reducers/anecdoteReducer";
 import AnecdoteForm from "./components/AnecdoteForm";
 import AnecdoteList from "./components/AnecdoteList";
 import Notification from "./components/Notification";
-import AnecdoteServices from "./services/anecdotes";
+import { initializeAnecdotes } from "./reducers/anecdoteReducer";
+// import AnecdoteServices from "./services/anecdotes";
+// import { initializeConnect } from "react-redux/es/components/connect";
 
 const App = () => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		AnecdoteServices.getAll().then((response) => dispatch(save(response.data)));
+		dispatch(initializeAnecdotes())
+		// AnecdoteServices.getAll().then((response) => dispatch(save(response.data)));
 	}, [dispatch]);
 
 	return (
