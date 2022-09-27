@@ -1,9 +1,8 @@
 import { useRef } from "react";
-import { useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { setFliter } from "../reducers/fliterReducer";
 
-const Fliter = () => {
-	const dispatch = useDispatch();
+const Fliter = (props) => {
 	const inputRef = useRef(null);
 
 	const style = {
@@ -12,7 +11,7 @@ const Fliter = () => {
 
 	function handleFliter() {
 		const fliterValues = inputRef.current.value;
-		dispatch(setFliter(fliterValues));
+		props.setFliter(fliterValues);
 	}
 
 	return (
@@ -22,4 +21,12 @@ const Fliter = () => {
 	);
 };
 
-export default Fliter;
+const mapDispatchToProps = (dispatch) => {
+	return {
+		setFliter: (fliterValues) => {
+			dispatch(setFliter(fliterValues));
+		},
+	};
+};
+
+export default connect(null, mapDispatchToProps)(Fliter);

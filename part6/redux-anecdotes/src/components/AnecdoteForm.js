@@ -1,32 +1,17 @@
 import { useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-	displayNotification,
-	removeNotification,
-} from "../reducers/notificationReducer";
+import { connect } from "react-redux";
 import { saveToServer } from "../reducers/anecdoteReducer";
-import { updateVote } from "../reducers/anecdoteReducer";
+import { setNotification } from "../reducers/notificationReducer";
 
-const AnecdoteForm = () => {
-	const anecdotes = useSelector((state) => state.anecdotes);
-	const dispatch = useDispatch();
+const AnecdoteForm = (props) => {
 	const inputRef = useRef(null);
 
 	const createNewAnecdote = (e) => {
-		console.log(anecdotes);
 		e.preventDefault();
 		const content = inputRef.current.value;
-		dispatch(saveToServer(content));
-		displayAndRemoveNotification(content);
+		props.saveToServer(content);
+		props.setNotification(content);
 	};
-
-	function displayAndRemoveNotification(content) {
-		const message = `you added ${content}`;
-		dispatch(displayNotification(message));
-		setTimeout(() => {
-			dispatch(removeNotification());
-		}, 5000);
-	}
 
 	return (
 		<>
@@ -41,4 +26,15 @@ const AnecdoteForm = () => {
 	);
 };
 
-export default AnecdoteForm;
+const mapDispatchToProps = (dispatch) => {
+	return {
+		setNotification: (message) => {
+			dispatch(setNotification(`you added '${message}'`, 5000))
+		},
+		saveToServer: (content) =>{
+			dispatch(saveToServer(content))
+		}
+	};
+};
+
+export default connect(null, mapDispatchToProps)(AnecdoteForm);
