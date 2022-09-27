@@ -1,11 +1,10 @@
 import { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { asObject, create } from "../reducers/anecdoteReducer";
 import {
 	displayNotification,
 	removeNotification,
 } from "../reducers/notificationReducer";
-import AnecdoteServices from "../services/anecdotes";
+import { saveToServer } from "../reducers/anecdoteReducer";
 
 const AnecdoteForm = () => {
 	const anecdotes = useSelector((state) => state.anecdotes);
@@ -16,8 +15,8 @@ const AnecdoteForm = () => {
 		console.log(anecdotes);
 		e.preventDefault();
 		const content = inputRef.current.value;
-		dispatch(create(asObject(content)));
-		saveToServer(asObject(content));
+		dispatch(saveToServer(content));
+		displayAndRemoveNotification(content);
 	};
 
 	function displayAndRemoveNotification(content) {
@@ -26,12 +25,6 @@ const AnecdoteForm = () => {
 		setTimeout(() => {
 			dispatch(removeNotification());
 		}, 5000);
-	}
-
-	function saveToServer(data) {
-		AnecdoteServices.create(data).then(() => {
-			displayAndRemoveNotification(data.content);
-		});
 	}
 
 	return (

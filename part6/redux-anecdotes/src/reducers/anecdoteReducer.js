@@ -11,13 +11,21 @@ export const asObject = (anecdote) => {
 	};
 };
 
-export const initializeAnecdotes = () =>{
-	return async dispatch => {
-		const anecdotes = await AnecdoteServices.getAll()
-		console.log(anecdotes);
-		dispatch(save(anecdotes.data))
-	}
-}
+export const initializeAnecdotes = () => {
+	return async (dispatch) => {
+		const anecdotes = await AnecdoteServices.getAll();
+		dispatch(save(anecdotes.data));
+	};
+};
+
+export const saveToServer = (data) => {
+	return async (dispatch) => {
+		const dataToSave = asObject(data);
+		await AnecdoteServices.create(dataToSave).then(() => {
+			dispatch(create(dataToSave));
+		});
+	};
+};
 
 const anecdoteSlice = createSlice({
 	name: "anecdote",
@@ -34,14 +42,13 @@ const anecdoteSlice = createSlice({
 			});
 		},
 		create: (state, action) => {
-			state.push(action.payload)
+			state.push(action.payload);
 		},
 		save: (state, action) => {
-			return action.payload
+			return action.payload;
 		},
 	},
 });
 
 export const { addVote, create, save } = anecdoteSlice.actions;
 export default anecdoteSlice.reducer;
-
