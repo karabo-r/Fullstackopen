@@ -5,6 +5,7 @@ import {
 	removeNotification,
 } from "../reducers/notificationReducer";
 import { saveToServer } from "../reducers/anecdoteReducer";
+import { updateVote } from "../reducers/anecdoteReducer";
 
 const AnecdoteForm = () => {
 	const anecdotes = useSelector((state) => state.anecdotes);

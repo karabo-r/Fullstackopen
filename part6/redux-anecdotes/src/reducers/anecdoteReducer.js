@@ -37,6 +37,7 @@ const anecdoteSlice = createSlice({
 				...anecdoteToChange,
 				votes: anecdoteToChange.votes + 1,
 			};
+			AnecdoteServices.update(newAnecdoteVotes.id, newAnecdoteVotes)
 			return state.map((anecdote) => {
 				return anecdote.id !== action.payload ? anecdote : newAnecdoteVotes;
 			});
