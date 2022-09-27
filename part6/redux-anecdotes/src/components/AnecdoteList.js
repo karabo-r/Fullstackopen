@@ -9,7 +9,7 @@ const AnecdoteList = () => {
 	const dispatch = useDispatch();
 	const fliterValue = useSelector((state) => state.fliter);
 	// anecdotes sorted from highest votes (B-A)
-	let anecdotes = useSelector((state) =>
+	const anecdotes = useSelector((state) =>
 		fliter([...state.anecdotes].sort(sortBA)),
 	);
 
