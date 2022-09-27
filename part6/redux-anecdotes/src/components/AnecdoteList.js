@@ -1,10 +1,10 @@
 import { useSelector, useDispatch } from "react-redux";
 import { addVote } from "../reducers/anecdoteReducer";
-import {
-	displayNotification,
-	removeNotification,
-} from "../reducers/notificationReducer";
-
+// import {
+	// displayNotification,
+	// removeNotification,
+// } from "../reducers/notificationReducer";
+import { setNotification } from "../reducers/notificationReducer";
 const AnecdoteList = () => {
 	const dispatch = useDispatch();
 	const fliterValue = useSelector((state) => state.fliter);
@@ -24,17 +24,17 @@ const AnecdoteList = () => {
 
 	const vote = (id) => {
 		dispatch(addVote(id));
-		displayAndRemoveNotification(id);
+		const votedAnecdote = anecdotes.find((item) => item.id === id);
+		dispatch(setNotification(`you voted '${votedAnecdote.content}'`, 5000))
 	};
 
-	function displayAndRemoveNotification(id) {
-		const votedAnecdote = anecdotes.find((item) => item.id === id);
-		const message = `you voted for ${votedAnecdote.content}`;
-		dispatch(displayNotification(message));
-		setTimeout(() => {
-			dispatch(removeNotification());
-		}, 5000);
-	}
+	// function displayAndRemoveNotification(id) {
+	// 	const message = `you voted for ${votedAnecdote.content}`;
+	// 	dispatch(displayNotification(message));
+	// 	setTimeout(() => {
+	// 		dispatch(removeNotification());
+	// 	}, 5000);
+	// }
 
 	return (
 		<>
