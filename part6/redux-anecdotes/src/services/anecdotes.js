@@ -7,8 +7,13 @@ async function getAll(){
     return response
 }
 
+async function create(data){
+    const response = await axios.post(baseUrl, data)
+    return response
+}
 const services = {
-    getAll
+    getAll,
+    create
 }
 
 export default services 

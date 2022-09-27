@@ -5,6 +5,7 @@ import {
 	displayNotification,
 	removeNotification,
 } from "../reducers/notificationReducer";
+import AnecdoteServices from "../services/anecdotes";
 
 const AnecdoteForm = () => {
 	const anecdotes = useSelector((state) => state.anecdotes);
@@ -16,7 +17,7 @@ const AnecdoteForm = () => {
 		e.preventDefault();
 		const content = inputRef.current.value;
 		dispatch(create(asObject(content)));
-		displayAndRemoveNotification(content);
+		saveToServer(asObject(content));
 	};
 
 	function displayAndRemoveNotification(content) {
@@ -25,6 +26,12 @@ const AnecdoteForm = () => {
 		setTimeout(() => {
 			dispatch(removeNotification());
 		}, 5000);
+	}
+
+	function saveToServer(data) {
+		AnecdoteServices.create(data).then(() => {
+			displayAndRemoveNotification(data.content);
+		});
 	}
 
 	return (
