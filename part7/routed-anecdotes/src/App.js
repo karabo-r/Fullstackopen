@@ -107,6 +107,11 @@ const CreateNew = (props) => {
 		});
 	};
 
+	const clearInputs = () => {  
+		const inputs = [content, author, info]
+		inputs.map(input=>input.clear())
+	}
+
 	return (
 		<div>
 			<h2>create a new anecdote</h2>
@@ -125,6 +130,7 @@ const CreateNew = (props) => {
 				</div>
 				<button>create</button>
 			</form>
+			<button onClick={clearInputs}>reset</button>
 		</div>
 	);
 };

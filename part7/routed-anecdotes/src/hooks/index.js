@@ -6,9 +6,14 @@ export function useField(name){
         setValue(value.target.value)
     }
 
+    function clear(){
+        setValue('')
+    }
+
     return {
         name,
         value,
-        onChange
+        onChange,
+        clear
     }
 }
