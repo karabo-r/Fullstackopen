@@ -162,6 +162,7 @@ const App = () => {
 	const addNew = (anecdote) => {
 		anecdote.id = Math.round(Math.random() * 10000);
 		setAnecdotes(anecdotes.concat(anecdote));
+		displayAndRemoveNotification(anecdote)
 	};
 
 	const anecdoteById = (id) => anecdotes.find((a) => a.id === id);
@@ -177,18 +178,26 @@ const App = () => {
 		setAnecdotes(anecdotes.map((a) => (a.id === id ? voted : a)));
 	};
 
+	function displayAndRemoveNotification(anecdote){
+		const message = `${anecdote.content} has been added`
+		setNotification(message)
+		setTimeout(()=>{
+			setNotification('')
+		},3000)
+	}
+
 	const match = useMatch("/anecdotes/:id");
 	const anecdote = match
 		? anecdotes.find((item) => item.id === Number(match.params.id))
 		: null;
 
-	console.log(anecdote);
 	return (
 		<>
 			{/* <Router> */}
+			{notification && notification}
 			<Menu />
 			<Routes>
-				<Route path="/create" element={<CreateNew />} />
+				<Route path="/create" element={<CreateNew addNew={addNew}/>} />
 				<Route path="/about" element={<About />} />
 				<Route
 					path="/anecdotes/:id"
