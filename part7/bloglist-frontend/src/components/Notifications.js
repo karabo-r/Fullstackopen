@@ -1,5 +1,5 @@
-function Notifications(){
-    return
+function Notifications() {
+  return;
 }
 
-export default Notifications
+export default Notifications;
