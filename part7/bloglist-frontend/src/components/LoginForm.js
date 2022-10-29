@@ -1,11 +1,18 @@
 import React from "react";
 import useNotification from "../hooks/useNotification";
 import BlogService from "../services/blogs";
-
+import {useSelector, useDispatch} from "react-redux"
+import {login} from "../reducers/userSlice"
 function LoginForm(props) {
   const notification = useNotification();
   const password = props.password;
   const username = props.username;
+
+  const user = useSelector(state=>state.user)
+  const dispatch = useDispatch()
+
+  // dispatch.lo
+  console.log(user);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -21,7 +28,11 @@ function LoginForm(props) {
         JSON.stringify(resultToUserLogin)
       );
       // update user
-      props.handleSetUser(resultToUserLogin);
+      // console.log(resultToUserLogin);
+      // dispatch(login(resultToUserLogin))
+      dispatch(login(resultToUserLogin))
+      // console.log(user);
+
     } catch (error) {
       notification.custom(`${error}`);
     }
