@@ -1,16 +1,16 @@
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { changeDisplayState } from "../reducers/blogSlice";
+import {  removeBlog, updateBlog_displayState, updateBlog_likes } from "../reducers/blogSlice";
+import BlogServices from '../services/blogs'
 // import orderedList from "../utils/orderList";
+
 
 const Blog = () => {
 	const blogs = useSelector((state) => state.blog);
+	const user = useSelector((state) => state.user);
 	const dispatch = useDispatch();
 
-  function orderedList(data){
-    const d =  data.sort((a, b) => b.likes - a.likes);
-    return d
-}
+
 	// function updateLikesInBlog(blog) {
 	//   const id = blog.id;
 	//   const updatedBlog = {
@@ -40,13 +40,18 @@ const Blog = () => {
 	//   }
 	// }
 
-	function updateDisplayState(e) {
-		dispatch(changeDisplayState({ e, blogs }));
-	}
 
-	function handleStateChange() {}
-	function updateLikesInBlog() {}
-	function deleteBlog() {}
+	function updateDisplayState(e) {
+		dispatch(updateBlog_displayState( e, blogs ));
+	}
+	
+	function updateBlogLikes(e) {
+		dispatch(updateBlog_likes(user.token, e, blogs));
+	}
+	
+	function handleDeleteBlog(e) {
+		dispatch(removeBlog( user.token, e.id, blogs ));
+	}
 
 	function showLessDetail(item) {
 		return (
@@ -59,9 +64,9 @@ const Blog = () => {
 				<p>{item.author}</p>
 				<p>
 					likes {item.likes}{" "}
-					<button onClick={() => updateLikesInBlog(item)}>like</button>
+					<button onClick={() => updateBlogLikes(item)}>like</button>
 				</p>
-				<button onClick={() => deleteBlog(item)}>Delete</button>
+				<button onClick={() => handleDeleteBlog(item)}>Delete</button>
 			</div>
 		);
 	}

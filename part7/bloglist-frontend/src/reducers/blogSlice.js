@@ -1,4 +1,44 @@
 import { createSlice } from "@reduxjs/toolkit";
+import BlogServices from "../services/blogs";
+
+export function updateBlog_likes(token, blogToChange, originalBlogs) {
+	return async (dispatch) => {
+		const changedBlog = {
+			...blogToChange,
+			likes: blogToChange.likes + 1,
+		};
+
+		BlogServices.updateLikes(token, blogToChange.id, changedBlog).then(() =>
+			dispatch(update({ originalBlogs, changedBlog })),
+		);
+	};
+}
+
+export function updateBlog_displayState(blogToChange, originalBlogs) {
+	return async (dispatch) => {
+		const changedBlog = {
+			...blogToChange,
+			displayState: !blogToChange.displayState,
+		};
+
+		dispatch(update({ originalBlogs, changedBlog }));
+	};
+}
+
+export function removeBlog(token, blogToDelete, originalBlogs) {
+	return async (dispatch) => {
+		BlogServices.deleteBlog(token, blogToDelete, originalBlogs).then(() => {
+			dispatch(remove({originalBlogs, blogToDelete}));
+		});
+	};
+}
+
+export function createNewBlog(data) {
+	return async (dispatch) => {
+		const results = await BlogServices.createBlog(data.newBlog, data.token);
+		dispatch(add(results));
+	};
+}
 
 const blogSlice = createSlice({
 	name: "blog",
@@ -7,37 +47,28 @@ const blogSlice = createSlice({
 		setBlogs: (state, action) => {
 			return action.payload;
 		},
-		updateBlog_likes: (state, action) => {
-			// payload = id
-			// const updatedBlog = {
-			//     ...state,
-			//     likes: blog.likes + 1,
-			//   };
-			// newBlogs = ...state.splice(currentIndex, 1, updatedBlog)
-			// const currentIndex = blogs.indexOf(blog);
-			//   blogs.splice(currentIndex, 1, updatedBlog);
-		},
-		deleteBlog: () => {},
-		changeDisplayState: (state, action) => {
-			const blogs = action.payload.blogs;
-			const currentBlog = action.payload.e;
-			const currentID = action.payload.e.id;
 
-			const changeDisplay = {
-				...currentBlog,
-				displayState: !currentBlog.displayState,
-			};
+		update: (state, action) => {
+			const { originalBlogs, changedBlog } = action.payload;
 
 			// new array wihtout current blog being modified
-			const filteredArr = blogs.filter((item) => item.id !== currentID);
-			const newBlogs = [...filteredArr, changeDisplay];
-
+			const filteredArr = originalBlogs.filter((b) => b.id !== changedBlog.id);
+			const newBlogs = [...filteredArr, changedBlog];
 			return newBlogs.sort((a, b) => b.likes - a.likes);
+		},
+
+		remove: (state, action) => {
+			const { originalBlogs, blogToDelete } = action.payload;
+			const filteredArr = originalBlogs.filter((b) => b.id !== blogToDelete );
+			return filteredArr;
+		},
+
+		add: (state, action) => {
+			state.push(action.payload);
 		},
 	},
 });
 
-export const { setBlogs, updateBlog_likes, deleteBlog, changeDisplayState } =
-	blogSlice.actions;
+export const { setBlogs, update, remove, add } = blogSlice.actions;
 
 export default blogSlice.reducer;

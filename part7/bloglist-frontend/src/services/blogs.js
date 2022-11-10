@@ -39,7 +39,7 @@ const updateLikes = (token, id, data) => {
 const deleteBlog = (token, id) => {
   const request = axios.delete(`${blogBaseUrl}/${id}`, {
     headers: {
-      // "Content-Type": "application/json",
+      "Content-Type": "application/json",
       Authorization: `bearer ${token}`,
     },
   });

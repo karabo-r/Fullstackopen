@@ -11,7 +11,7 @@ export const userSlice = createSlice({
 			return action.payload;
 		},
 		logout: (state, action) => {
-      return action.payload
+      	return action.payload
       // console.log("asdfs");
 		},
 	},
