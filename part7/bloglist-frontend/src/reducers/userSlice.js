@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-
 let initialState = [];
 
 export const userSlice = createSlice({
@@ -10,14 +9,14 @@ export const userSlice = createSlice({
 		login: (state, action) => {
 			return action.payload;
 		},
+
 		logout: (state, action) => {
-      	return action.payload
-      // console.log("asdfs");
+			localStorage.clear();
+			return action.payload;
 		},
 	},
 });
 
-// Action creators are generated for each case reducer function
 export const { login, logout } = userSlice.actions;
 
 export default userSlice.reducer;

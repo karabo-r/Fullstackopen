@@ -11,35 +11,7 @@ const Blog = () => {
 	const dispatch = useDispatch();
 
 
-	// function updateLikesInBlog(blog) {
-	//   const id = blog.id;
-	//   const updatedBlog = {
-	//     ...blog,
-	//     likes: blog.likes + 1,
-	//   };
-
-	//   // update ui without calling api for rerender
-	//   const currentIndex = blogs.indexOf(blog);
-	//   blogs.splice(currentIndex, 1, updatedBlog);
-	//   setBlogs([...blogs]);
-
-	//   // update likes on database
-	//   BlogsServices.updateLikes(user.token, id, updatedBlog);
-	// }
-
-	// function deleteBlog(blog) {
-	//   const id = blog.id;
-	//   const currentIndex = blogs.indexOf(blog);
-	//   const confirmMessage = `Remove blog ${blog.title} by ${blog.author}`;
-	//   if (window.confirm(confirmMessage)) {
-	//     blogs.splice(currentIndex, 1);
-	//     setBlogs([...blogs]);
-	//     BlogsServices.deleteBlog(user.token, id);
-	//   } else {
-	//     return;
-	//   }
-	// }
-
+	console.log(blogs);
 
 	function updateDisplayState(e) {
 		dispatch(updateBlog_displayState( e, blogs ));
