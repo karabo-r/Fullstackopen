@@ -6,7 +6,6 @@ import LoginForm from "./LoginForm";
 const CurrentUser = () => {
 	const user = useSelector((state) => state.user);
 	const dispatch = useDispatch()
-	console.log(user);
 
 	function handleLogout(){
 		dispatch(logout([]))

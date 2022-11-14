@@ -4,6 +4,7 @@ import { login } from "./reducers/userSlice";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Users from "./components/Users";
 import Home from "./pages/Home";
+import IndividualUser from "./components/IndividualUser";
 
 const App = () => {
 	const dispatch = useDispatch();
@@ -12,10 +13,7 @@ const App = () => {
 	useEffect(() => {
 		const user = JSON.parse(localStorage.getItem("loggedUserToken"));
 		if (user) {
-			console.log("user found");
 			dispatch(login(user));
-		} else {
-			console.log("user not found");
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
@@ -25,6 +23,7 @@ const App = () => {
 			<Routes>
 				<Route path="/" element={<Home />} />
 				<Route path="/users" element={<Users />} />
+				<Route path="/users/:id" element={<IndividualUser />} />
 			</Routes>
 		</Router>
 	);

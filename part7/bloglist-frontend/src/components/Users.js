@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import CurrentUser from "./CurrentUser";
 import UserServices from "../services/users";
 import { useEffect } from "react";
+import {Link, useParams } from "react-router-dom";
 
 const Users = () => {
 	const [userDetails, setUserDetails] = useState([]);
@@ -12,26 +13,30 @@ const Users = () => {
 		});
 	}, []);
 
-	console.log(localStorage);
+	const { userID } = useParams();
 
 	return (
 		<>
 			<CurrentUser />
-			<h1>Users</h1>
-			<table>
-				<tr>
-					<th></th>
-					<th>no of blogs</th>
-				</tr>
-				{userDetails?.map((item) => {
-					return (
+			{userID !== 0 && (
+				<>
+					<h1>Users</h1>
+					<table>
 						<tr>
-							<td>{item.name}</td>
-							<td>{item.blogs.length}</td>
+							<th></th>
+							<th>no of blogs</th>
 						</tr>
-					);
-				})}
-			</table>
+						{userDetails?.map((item) => {
+							return (
+								<tr>
+									<Link to={`/users/${item.id}`}><td>{item.name}</td></Link>
+									<td>{item.blogs.length}</td>
+								</tr>
+							);
+						})}
+					</table>
+				</>
+			)}
 		</>
 	);
 };
