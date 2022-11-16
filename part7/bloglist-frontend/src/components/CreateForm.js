@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import useField from "../hooks/useField";
 import { createNewBlog } from "../reducers/blogSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 const CreateForm = (props) => {
 	const user = useSelector((state) => state.user);
 	const dispatch = useDispatch();
-
+	const [isVisible, setIsVisible] = useState(false);
 	const title = useField("text");
 	const author = useField("text");
 	const url = useField("text");
@@ -42,21 +42,30 @@ const CreateForm = (props) => {
 		// 	});
 	}
 
+	function handleSetIsVisible(){
+		setIsVisible(prev=>!prev)
+	}
+
 	return (
-		<form onSubmit={handleCreate}>
-			<h2>Create A new blog entry</h2>
-			<p>
-				Title: <input {...title} />
-			</p>
-			<p>
-				Author: <input {...author} />
-			</p>
-			<p>
-				Url: <input {...url} />
-			</p>
-			<button type="submit">Create</button>
-			<button onClick={() => props.setVisible(false)}>Cancel</button>
-		</form>
+		<>
+			{isVisible && (
+				<form onSubmit={handleCreate}>
+					<h2>Create A new blog entry</h2>
+					<p>
+						Title: <input {...title} />
+					</p>
+					<p>
+						Author: <input {...author} />
+					</p>
+					<p>
+						Url: <input {...url} />
+					</p>
+					<button type="submit">Create</button>
+					<button onClick={handleSetIsVisible}>Cancel</button>
+				</form>
+			)}
+			{!isVisible && <button onClick={handleSetIsVisible}>Create New Note</button>}
+		</>
 	);
 };
 

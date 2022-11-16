@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import {  removeBlog, updateBlog_displayState, updateBlog_likes } from "../reducers/blogSlice";
 import BlogServices from '../services/blogs'
+import { Link } from "react-router-dom";
 // import orderedList from "../utils/orderList";
 
 
@@ -54,13 +55,17 @@ const Blog = () => {
 		);
 	}
 
+	console.log(blogs);
 	const processedBlogs = blogs?.map((item) => {
-		return (
-			<div key={item.id}>
-				{!item.displayState && showMoreDetail(item)}
-				{item.displayState && showLessDetail(item)}
-			</div>
-		);
+		// return (
+		// 	<div key={item.id}>
+		// 		{!item.displayState && showMoreDetail(item)}
+		// 		{item.displayState && showLessDetail(item)}
+		// 	</div>
+		// );
+		return <div key={item.id}>
+			<Link to={`/blogs/${item.id}`}><h1>{item.title}</h1></Link>
+		</div>
 	});
 
 	return <BlogList>{processedBlogs}</BlogList>;
@@ -71,8 +76,9 @@ const BlogList = styled.div`
 	margin-left: 23px;
 
 	h1 {
+		font-size: 1.5	rem;
 		color: rebeccapurple;
-		border: 1px solid;
+		border: 1px solid;	
 		padding: 6px;
 	}
 `;
