@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import CurrentUser from "./CurrentUser";
 import UserServices from "../services/users";
 import { useEffect } from "react";
-import {Link, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import Navigation from "./Navigation";
 
 const Users = () => {
 	const [userDetails, setUserDetails] = useState([]);
@@ -17,6 +18,7 @@ const Users = () => {
 
 	return (
 		<>
+			<Navigation />
 			<CurrentUser />
 			{userID !== 0 && (
 				<>
@@ -29,7 +31,9 @@ const Users = () => {
 						{userDetails?.map((item) => {
 							return (
 								<tr>
-									<Link to={`/users/${item.id}`}><td>{item.name}</td></Link>
+									<Link to={`/users/${item.id}`}>
+										<td>{item.name}</td>
+									</Link>
 									<td>{item.blogs.length}</td>
 								</tr>
 							);
