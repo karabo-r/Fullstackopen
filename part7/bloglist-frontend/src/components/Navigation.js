@@ -16,12 +16,12 @@ const Navigation = () => {
 			{user.name && (
 				<>
 					<Group spacing="xs">
-						<Link to={"/"}>
+						<Link to={"/"} exact>
 							<Button variant="subtle" color="dark">
 								Blogs
 							</Button>
 						</Link>
-						<Link to={"users"}>
+						<Link to={"/users"} exact>
 							<Button variant="subtle" color="dark">
 								Users
 							</Button>

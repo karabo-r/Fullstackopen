@@ -1,3 +1,4 @@
+import { Button, Group, TextInput } from "@mantine/core";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -81,13 +82,17 @@ const IndividualBlog = () => {
 	return (
 		<>
 			<Navigation />
-			<CurrentUser />
+			{/* <CurrentUser /> */}
 			{processedBlog}
 			<h2>comments</h2>
 			<div style={{ display: "flex" }}>
 				<form onSubmit={(e) => handleNewComment(e)}>
-					<input {...comment} />
-					<button>Add comment</button>
+					<Group>
+
+					{/* <input {...comment} /> */}
+					<TextInput {...comment}/>
+					<Button color={"dark"} type="submit">Add comment</Button>
+					</Group>
 				</form>
 			</div>
 			<br />

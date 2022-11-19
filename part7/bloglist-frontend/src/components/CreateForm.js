@@ -67,6 +67,7 @@ const CreateForm = (props) => {
 							Cancel
 						</Button>
 					</Group>
+					<Space h="sm" />
 				</form>
 			)}
 			{!isVisible && (
