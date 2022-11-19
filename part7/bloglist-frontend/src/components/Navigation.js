@@ -1,8 +1,9 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../reducers/userSlice";
-import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { Button, Group, Text } from "@mantine/core";
+
 const Navigation = () => {
 	const user = useSelector((state) => state.user);
 	const dispatch = useDispatch();
@@ -11,23 +12,30 @@ const Navigation = () => {
 		dispatch(logout([]));
 	}
 	return (
-		<Container>
+		<>
 			{user.name && (
 				<>
-					<Link to={"/"}>Blogs</Link>
-					<Link to={"/users"}>Users</Link>
-					<p>{user.name} logged in</p>
-					<button onClick={handleLogout}>Logout</button>
+					<Group spacing="xs">
+						<Link to={"/"}>
+							<Button variant="subtle" color="dark">
+								Blogs
+							</Button>
+						</Link>
+						<Link to={"users"}>
+							<Button variant="subtle" color="dark">
+								Users
+							</Button>
+						</Link>
+						<Button onClick={handleLogout} color="dark">
+							Logout
+						</Button>
+						<Text fz="sm">{user.name}</Text>
+					</Group>
 				</>
 			)}
-		</Container>
+			{/* </Header> */}
+		</>
 	);
 };
 
-const Container = styled.div`
-	display: flex;
-	height: 2rem;
-	align-items: center;
-	gap: 1rem;
-`;
 export default Navigation;

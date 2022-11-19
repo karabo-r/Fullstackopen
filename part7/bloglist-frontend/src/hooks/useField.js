@@ -4,17 +4,18 @@ const useField = (type) => {
 
   const onChange = (event) => {
     setValue(event.target.value);
-    // console.log(value);
+    console.log(value);
+
   };
 
-  const clear = () => {
-    setValue("");
-  };
+  // const clear = () => {
+  //   setValue("");
+  // };
 
   return {
     type,
     value,
-    clear,
+    // clear,
     onChange,
   };
 };

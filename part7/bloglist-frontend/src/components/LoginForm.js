@@ -4,6 +4,13 @@ import BlogService from "../services/blogs";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/userSlice";
 import useField from "../hooks/useField";
+import {
+	PasswordInput,
+	Stack,
+	TextInput,
+	Button,
+	Space,
+} from "@mantine/core";
 
 function LoginForm() {
 	const notification = useNotification();
@@ -14,7 +21,7 @@ function LoginForm() {
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
-    
+
 		try {
 			const resultToUserLogin = await BlogService.loginUser({
 				username: username.value,
@@ -38,13 +45,16 @@ function LoginForm() {
 			{notification.display && notification.message}
 			<h1>Please Login</h1>
 			<form onSubmit={handleLogin}>
-				<h3>
-					username <input {...username} />
-				</h3>
-				<h3>
-					password <input {...password} />
-				</h3>
-				<button type="submit">Login</button>
+				<Stack sx={{ maxWidth: 300 }}>
+					<TextInput label="Username" {...username} />
+					<PasswordInput
+						label="Confirm password"
+						defaultValue="secret"
+						{...password}
+					/>
+				</Stack>
+				<Space h="md" />
+				<Button type="submit" color="dark">Login</Button>
 			</form>
 		</>
 	);

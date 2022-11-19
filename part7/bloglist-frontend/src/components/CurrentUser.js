@@ -16,9 +16,7 @@ const CurrentUser = () => {
 				<LoginForm />
 			) : (
 				<>
-					<h1>blogs</h1>
-					<h2>{user.username} logged in</h2>
-					<button onClick={handleLogout}>logout</button> <br />
+					<h1>Blogs</h1>
 				</>
 			)}
 		</div>

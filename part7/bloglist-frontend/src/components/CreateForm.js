@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import useField from "../hooks/useField";
 import { createNewBlog } from "../reducers/blogSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { Button, Group, Space, Stack, TextInput } from "@mantine/core";
 
 const CreateForm = (props) => {
 	const user = useSelector((state) => state.user);
@@ -42,8 +43,8 @@ const CreateForm = (props) => {
 		// 	});
 	}
 
-	function handleSetIsVisible(){
-		setIsVisible(prev=>!prev)
+	function handleSetIsVisible() {
+		setIsVisible((prev) => !prev);
 	}
 
 	return (
@@ -51,20 +52,31 @@ const CreateForm = (props) => {
 			{isVisible && (
 				<form onSubmit={handleCreate}>
 					<h2>Create A new blog entry</h2>
-					<p>
-						Title: <input {...title} />
-					</p>
-					<p>
-						Author: <input {...author} />
-					</p>
-					<p>
-						Url: <input {...url} />
-					</p>
-					<button type="submit">Create</button>
-					<button onClick={handleSetIsVisible}>Cancel</button>
+					<Stack sx={{ maxWidth: 300 }}>
+						<TextInput label="Title" {...title} />
+						<TextInput label="Author" {...author} />
+						<TextInput label="URL" {...url} />
+					</Stack>
+
+					<Space h="md" />
+					<Group>
+						<Button type="submit" color={"dark"}>
+							Create
+						</Button>
+						<Button onClick={handleSetIsVisible} color="dark">
+							Cancel
+						</Button>
+					</Group>
 				</form>
 			)}
-			{!isVisible && <button onClick={handleSetIsVisible}>Create New Note</button>}
+			{!isVisible && (
+				<>
+					<Button onClick={handleSetIsVisible} color="dark">
+						Create New Note
+					</Button>
+					<Space h="sm" />
+				</>
+			)}
 		</>
 	);
 };
