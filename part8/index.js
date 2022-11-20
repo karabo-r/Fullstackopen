@@ -95,6 +95,7 @@ let books = [
 const typeDefs = gql`
 	type Query {
 		allBooks: [Book!]!
+		allAuthors: [Author!]!
 		bookCount: Int!
 		authorCount: Int!
 	}
@@ -106,13 +107,33 @@ const typeDefs = gql`
 		id: String!
 		genres: [String!]!
 	}
+
+	type Author {
+		name: String!
+		born: Int
+		bookCount: Int
+	}
 `;
 
 const resolvers = {
 	Query: {
 		allBooks: () => books,
+		allAuthors: () => authors,
 		bookCount: () => books.length,
 		authorCount: () => authors.length,
+	},
+	Author: {
+		name: (parent, agrs, context) => parent.name,
+		bookCount: (parent, args, context) => {
+			let numberOfBooks = 0;
+			const author = parent.name;
+			books.find((item) => {
+				if (item.author === author) {
+					numberOfBooks++;
+				}
+			});
+			return numberOfBooks;
+		},
 	},
 };
 
