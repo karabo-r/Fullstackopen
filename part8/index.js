@@ -108,6 +108,7 @@ const typeDefs = gql`
 			published: Int
 			genres: [String]
 		): Book
+		editAuthor(name: String!, setBornTo: Int): Author
 	}
 
 	type Book {
@@ -172,12 +173,29 @@ const resolvers = {
 					name: args.author,
 					born: null,
 				};
-				authors = authors.concat(newAuthor)
+				authors = authors.concat(newAuthor);
 			}
 			const newBook = { ...args };
 
 			books = books.concat(newBook);
 			return newBook;
+		},
+		// Joshua Kerievsky
+		editAuthor: (parent, agrs, context) => {
+			const { name, setBornTo } = agrs;
+			const doesAuthorExist = books.find((item) => item.name === name);
+
+			if (!doesAuthorExist) return null;
+
+			// update the author
+			authors.map((item) => {
+				if (item.name === name) {
+					item.born = setBornTo;
+				}
+			});
+
+			const newAuthor = doesAuthorExist;
+			return newAuthor;
 		},
 	},
 };
