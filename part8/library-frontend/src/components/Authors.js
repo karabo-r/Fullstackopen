@@ -3,7 +3,9 @@ import { useQuery } from "@apollo/client";
 
 const Authors = (props) => {
 	const authors = [];
-	const results = useQuery(ALL_AUTHORS);
+	const results = useQuery(ALL_AUTHORS, {
+		pollInterval: 2000
+	  });
 
 	if (results.data) {
 		results.data.allAuthors?.map((item) => {

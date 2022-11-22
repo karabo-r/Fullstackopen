@@ -3,7 +3,9 @@ import { ALL_BOOKS } from "../queries";
 
 const Books = (props) => {
 	const books = [];
-	const results = useQuery(ALL_BOOKS);
+	const results = useQuery(ALL_BOOKS,{
+		pollInterval: 2000
+	  });
 
 	if (results.data) {
 		results.data.allBooks.map((item) => {
