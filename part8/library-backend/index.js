@@ -175,9 +175,10 @@ const resolvers = {
 				};
 				authors = authors.concat(newAuthor);
 			}
-			const newBook = { ...args };
+			const newBook = { id: uid(), ...args };
 
-			books = books.concat(newBook);
+			// books = books.concat(newBook);
+			books.push(newBook);
 			return newBook;
 		},
 		// Joshua Kerievsky
