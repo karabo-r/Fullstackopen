@@ -28,7 +28,7 @@ const NewBook = (props) => {
 			genres,
 		};
 		// console.log(data);
-    addBook({  variables: data })
+    addBook({ variables: data })
 
 		// setTitle("");
 		// setPublished("");
