@@ -2,10 +2,11 @@ import { ALL_AUTHORS } from "../queries.js";
 import { useMutation, useQuery } from "@apollo/client";
 import { useState } from "react";
 import { UPDATE_AUTHOR_BIRTHYEAR } from "../mutations.js";
+import Select from "react-select";
 
 const Authors = (props) => {
-	const [name, setName] = useState("");
 	const [born, setBorn] = useState("");
+	const [selectedOption, setSelectedOption] = useState(null);
 
 	const authors = [];
 	const allAuthors = useQuery(ALL_AUTHORS, { pollInterval: 2000 });
@@ -25,9 +26,15 @@ const Authors = (props) => {
 
 	function handleUpdateAuthor(e) {
 		e.preventDefault();
-		const newAuthorBirthYear = { name, setBornTo: +born };
+		const newAuthorBirthYear = { name: selectedOption.value, setBornTo: +born };
 		editAuthor({ variables: newAuthorBirthYear });
 	}
+
+	// create options array of objects for react select
+	const options = [];
+	authors?.map((item) => {
+		return options.push({ value: item.name, label: item.name });
+	});
 
 	return (
 		<>
@@ -54,14 +61,11 @@ const Authors = (props) => {
 				<h2>Set birthday</h2>
 
 				<form onSubmit={handleUpdateAuthor}>
-					<p>
-						name{" "}
-						<input
-							type={"text"}
-							value={name}
-							onChange={(e) => setName(e.target.value)}
-						/>
-					</p>
+					<Select
+						defaultValue={selectedOption}
+						onChange={setSelectedOption}
+						options={options}
+					/>
 					<p>
 						born{" "}
 						<input
