@@ -184,7 +184,7 @@ const resolvers = {
 		// Joshua Kerievsky
 		editAuthor: (parent, agrs, context) => {
 			const { name, setBornTo } = agrs;
-			const doesAuthorExist = books.find((item) => item.name === name);
+			const doesAuthorExist = authors.find((item) => item.name === name);
 
 			if (!doesAuthorExist) return null;
 
