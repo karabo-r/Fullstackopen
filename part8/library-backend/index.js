@@ -1,5 +1,13 @@
 const { ApolloServer, gql } = require("apollo-server");
 const { uid } = require("uid");
+const mongoose = require("mongoose")
+const Book = require("./models/Book");
+const Author = require("./models/Author");
+
+mongoose.set("strictQuery", false)
+mongoose.connect("mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.5.4")
+.then(()=>console.log("database connected"))
+.catch((error)=>console.log(error))
 
 let authors = [
 	{
@@ -103,20 +111,20 @@ const typeDefs = gql`
 
 	type Mutation {
 		addBook(
-			title: String
-			author: String
-			published: Int
-			genres: [String]
-		): Book
-		editAuthor(name: String!, setBornTo: Int): Author
+			title: String!
+			author: String!
+			published: Int!
+			genres: [String!]!
+		): Book!
+		editAuthor(name: String!, setBornTo: Int!): Author
 	}
 
 	type Book {
 		title: String!
 		published: Int!
-		author: String!
-		id: String!
+		author: Author!
 		genres: [String!]!
+		id: ID!
 	}
 
 	type Author {
